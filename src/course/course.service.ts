@@ -62,7 +62,7 @@ export class CourseService {
         )
         //Método que carrega os dados que serão alterados
         const course = await this.courseRepository.preload({
-            id: +id,
+            id: id,
             ...updateCourseDto,
             tags,
         });
