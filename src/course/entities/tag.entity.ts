@@ -8,7 +8,7 @@ PrimaryGeneratedColumn
 } from "typeorm";
 import { course } from "./course.entity";
 
-import { v4 as uuidV4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 @Entity('tags')
 export class Tag {
@@ -29,6 +29,6 @@ export class Tag {
             return;
         }
 
-        this.id = uuidV4();
+        this.id = uuidv4();
     }
 }
