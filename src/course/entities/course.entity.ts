@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Tag } from './tag.entity';
 
 @Entity('courses')
-export class course {
+export class Course {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column()
@@ -23,7 +23,7 @@ export class course {
   //Join
   @JoinTable()
   //N para N
-  @ManyToMany(() => Tag, (tag: Tag) => tag.courses, {
+  @ManyToMany(() => Tag, (tag) => tag.courses, {
     cascade: true,
   })
   tags: Tag[];

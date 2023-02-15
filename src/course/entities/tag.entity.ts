@@ -6,7 +6,7 @@ Entity,
 ManyToMany,
 PrimaryGeneratedColumn
 } from "typeorm";
-import { course } from "./course.entity";
+import { Course } from "./course.entity";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -17,8 +17,8 @@ export class Tag {
     @Column()
     name: string;
     //Relação N p N
-    @ManyToMany(() => course, (course: course) => course.tags)
-    courses: course[];
+    @ManyToMany(() => Course, (course) => course.tags)
+    courses: Course[];
 
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;

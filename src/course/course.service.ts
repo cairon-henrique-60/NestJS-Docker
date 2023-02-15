@@ -8,14 +8,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCourseDto } from './dto/create-course.dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto/update-course.dto';
-import { course } from './entities/course.entity';
+import { Course } from './entities/course.entity';
 import { Tag } from './entities/tag.entity';
 
 @Injectable()
 export class CourseService {
     constructor(
-        @InjectRepository(course)
-        private readonly courseRepository: Repository<course>,
+        @InjectRepository(Course)
+        private readonly courseRepository: Repository<Course>,
         // Injeção de Dep da entitade Tag
         @InjectRepository(Tag)
         private readonly tagRepository: Repository<Tag>,
