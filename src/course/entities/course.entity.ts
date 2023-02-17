@@ -21,7 +21,7 @@ export class Course {
   @Column()
   description: string;
   //Join
-  @JoinTable()
+  @JoinTable({ name: 'courses_tags'})
   //N para N
   @ManyToMany(() => Tag, (tag) => tag.courses, {
     cascade: true,
