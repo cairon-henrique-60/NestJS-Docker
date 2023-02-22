@@ -15,10 +15,10 @@ import { Tag } from './entities/tag.entity';
 export class CourseService {
     constructor(
         @InjectRepository(Course)
-        private readonly courseRepository: Repository<Course>,
+        private readonly courseRepository?: Repository<Course>,
         // Injeção de Dep da entitade Tag
         @InjectRepository(Tag)
-        private readonly tagRepository: Repository<Tag>,
+        private readonly tagRepository?: Repository<Tag>,
     ){}
 
     //Método para traser todos os registros do DB
