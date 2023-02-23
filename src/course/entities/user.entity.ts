@@ -8,8 +8,6 @@ import {
     PrimaryGeneratedColumn 
 } from "typeorm";
 import { Course } from "./course.entity";
-import { v4 as uuidv4 } from "uuid";
-
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn('uuid')
@@ -18,9 +16,11 @@ export class User {
     name: string;
     @Column()
     role: string;
-    @JoinTable({ name: 'uses_courses'})
-    @ManyToMany(() => Course, (course) => course.name)
-    courses: Course[];
+    @JoinTable({ name: 'users_courses'})
+    @ManyToMany(() => Course, (course) => course.name, {
+        cascade: true,
+    })
+    courses?: Course[];
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 }

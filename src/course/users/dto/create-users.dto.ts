@@ -6,5 +6,5 @@ export class CreateUsersDto {
     @IsString()
     readonly role: string;
     @IsString({ each: true })
-    readonly courses: string[];
+    readonly courses?: string[];
 }

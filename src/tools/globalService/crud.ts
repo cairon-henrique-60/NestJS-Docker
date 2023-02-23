@@ -8,7 +8,7 @@ export abstract class GeneralService<T> {
 
     findAll(relations: FindManyOptions<T>) {
         return this.repository.find({
-            relations: [`${relations}`],
+            relations: [String(relations)],
         });
     }
 
