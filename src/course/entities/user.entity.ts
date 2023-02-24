@@ -10,7 +10,7 @@ import {
 import { Course } from "./course.entity";
 @Entity('users')
 export class User {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
     id: number;
     @Column()
     name: string;

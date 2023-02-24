@@ -4,18 +4,29 @@ import { DeepPartial, FindManyOptions, Repository } from "typeorm";
 
 @Injectable()
 export abstract class GeneralService<T> {
+    protected readonly defaultRelations: string[] = [];
     protected constructor(protected readonly repository: Repository<T>) {}
 
     findAll(relations: FindManyOptions<T>) {
-        return this.repository.find({
-            relations: [String(relations)],
-        });
+        const mergedRelations = {
+            ...relations,
+            relations: [
+                ...this.defaultRelations, 
+                ...(relations.relations || [])
+            ],
+        };
+        return this.repository.find(mergedRelations);
     }
 
     findOne(id: string | number, relations: FindManyOptions<T>) {
-        const user = this.repository.findOne(id, {
-            relations: [`${relations}`],
-        });
+        const mergedRelations = {
+            ...relations,
+            relations: [
+                ...this.defaultRelations, 
+                ...(relations.relations || [])
+            ],
+        };
+        const user = this.repository.findOne(id, mergedRelations);
 
         if (!user) {
             throw new NotFoundException(`User ${id} not found!`);
@@ -39,14 +50,14 @@ export abstract class GeneralService<T> {
         return this.repository.save(objectCreated);
     }
 
-    async update(id: string | number, props: any) {
+    async update(id: string, props: any) {
         const entity = await this.repository.findOne( props.name );
 
         if (!entity) {
             throw new NotFoundException(`${props.name} is not found!`);
         }
         const propsPreload = this.repository.preload({
-            id: id,
+            id: +id,
             ...props, 
             entity,
         })

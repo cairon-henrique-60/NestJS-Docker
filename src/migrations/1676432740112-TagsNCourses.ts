@@ -7,8 +7,10 @@ export class TagsNCourses1676432740112 implements MigrationInterface {
             'courses_tags',
             new TableColumn({
                 name: 'tagsId',
-                type: 'uuid',
+                type: 'int',
                 isNullable: true,
+                isGenerated: true,
+                generationStrategy: 'increment',
             })
         );
 

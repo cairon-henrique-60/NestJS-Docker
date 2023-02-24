@@ -30,7 +30,7 @@ export class CourseService {
 
     //Filtro
     findOne(id: string) {
-        const course = this.courseRepository.findOne(id, {
+        const course = this.courseRepository.findOne(Number(id), {
             relations: ['tags'],
         });
 
@@ -62,7 +62,7 @@ export class CourseService {
         )
         //Método que carrega os dados que serão alterados
         const course = await this.courseRepository.preload({
-            id: id,
+            id: +id,
             ...updateCourseDto,
             tags,
         });
@@ -77,7 +77,7 @@ export class CourseService {
 
     //DELETE
     async removeCourse(id: string) {
-        const course = await this.courseRepository.findOne(id);
+        const course = await this.courseRepository.findOne(Number(id));
 
          if (!course) {
             throw new NotFoundException(`Course ${id} not found`);

@@ -8,8 +8,10 @@ export class CreateCourseTable1676228135034 implements MigrationInterface {
             columns: [
                 {
                     name: 'id',
-                    type: 'uuid',
+                    type: 'int',
                     isPrimary: true,
+                    isGenerated: true,
+                    generationStrategy: 'increment',
                 },
                 {
                     name: 'name',

@@ -12,8 +12,8 @@ import { v4 as uuidv4 } from "uuid";
 
 @Entity('tags')
 export class Tag {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
+    id: number;
     @Column()
     name: string;
     //Relação N p N
@@ -22,13 +22,4 @@ export class Tag {
 
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
-
-    @BeforeInsert()
-    generateId() {
-        if (this.id) {
-            return;
-        }
-
-        this.id = uuidv4();
-    }
 }

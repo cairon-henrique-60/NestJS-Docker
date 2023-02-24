@@ -8,10 +8,10 @@ export class CourseAndTags1676431792046 implements MigrationInterface {
             columns: [
                 {
                     name: 'id',
-                    type: 'uuid',
+                    type: 'int',
                     isPrimary: true,
-                    generationStrategy: 'uuid',
-                    default: 'uuid_generate_v4()',
+                    isGenerated: true,
+                    generationStrategy: 'increment',
                 },
                 {
                     name: 'created_at',

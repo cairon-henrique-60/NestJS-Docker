@@ -15,12 +15,12 @@ export class CrateTablaUsersAndCourses1677144156865 implements MigrationInterfac
                 },
                 {
                     name: 'coursesId',
-                    type: 'uuid',
+                    type: 'int',
                     isNullable: true,                      
                 },
                 {
                     name: 'usersId',
-                    type: 'uuid',
+                    type: 'int',
                     isNullable: true,                      
                 },
             ]
