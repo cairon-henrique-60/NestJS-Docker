@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 
 import { Tag } from './tag.entity';
+import { User } from "./user.entity";
 
 @Entity('courses')
 export class Course {
@@ -18,14 +19,14 @@ export class Course {
   name: string;
   @Column()
   description: string;
-  //Join
   @JoinTable({ name: 'courses_tags'})
-  //N para N
   @ManyToMany(() => Tag, (tag) => tag.courses, {
     cascade: true,
   })
   tags: Tag[];
-
+  @JoinTable({ name: 'users_courses'})
+  @ManyToMany(() => User, (user) => user.courses)
+  users: User[];
   @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 }

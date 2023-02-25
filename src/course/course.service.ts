@@ -1,8 +1,8 @@
-import { 
-    HttpException, 
-    HttpStatus, 
-    Injectable, 
-    NotFoundException 
+import {
+    HttpException,
+    HttpStatus,
+    Injectable,
+    NotFoundException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,28 +10,28 @@ import { CreateCourseDto } from './dto/create-course.dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto/update-course.dto';
 import { Course } from './entities/course.entity';
 import { Tag } from './entities/tag.entity';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class CourseService {
     constructor(
         @InjectRepository(Course)
-        private readonly courseRepository?: Repository<Course>,
-        // Injeção de Dep da entitade Tag
+        private readonly courseRepository: Repository<Course>,
         @InjectRepository(Tag)
-        private readonly tagRepository?: Repository<Tag>,
-    ){}
+        private readonly tagRepository: Repository<Tag>,
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+    ) { }
 
-    //Método para traser todos os registros do DB
     findAll() {
         return this.courseRepository.find({
-            relations: ['tags'],
+            relations: ['tags', 'users'],
         });
     };
 
-    //Filtro
     findOne(id: string) {
         const course = this.courseRepository.findOne(Number(id), {
-            relations: ['tags'],
+            relations: ['tags', 'users'],
         });
 
         if (!course) {
@@ -40,17 +40,25 @@ export class CourseService {
         return course;
     };
 
-    //Post
     async createCourse(createCourseDto: CreateCourseDto) {
-        //Método que prepara o OBJ a ser salvo
+
         const tags = await Promise.all(
             createCourseDto.tags.map(name => this.preloadTagByName(name)),
         );
+
+        const users = await Promise.all(
+            createCourseDto.user.map(name => this.userRepository.findOne(name)),
+        );
+
+        if (!users) {
+            throw new NotFoundException(`User ${users} not found`)
+        };
+
         const course = this.courseRepository.create({
             ...createCourseDto,
             tags,
+            users,
         });
-        //Método que salva os dados no DB
         return this.courseRepository.save(course);
     }
 
@@ -59,14 +67,23 @@ export class CourseService {
             await Promise.all(
                 updateCourseDto.tags.map(name => this.preloadTagByName(name)),
             )
-        )
-        //Método que carrega os dados que serão alterados
+        );
+        
+        const users = await Promise.all(
+            updateCourseDto.user.map(name => this.userRepository.findOne(name)),
+        );
+
+        if (!users) {
+            throw new NotFoundException(`User ${users} not found`)
+        };
+
         const course = await this.courseRepository.preload({
             id: +id,
             ...updateCourseDto,
             tags,
+            users,
         });
-        
+
         if (!course) {
             throw new NotFoundException(`Course ${id} not found`);
         }
@@ -75,19 +92,16 @@ export class CourseService {
 
     };
 
-    //DELETE
     async removeCourse(id: string) {
         const course = await this.courseRepository.findOne(Number(id));
 
-         if (!course) {
+        if (!course) {
             throw new NotFoundException(`Course ${id} not found`);
         }
 
         return this.courseRepository.remove(course);
     };
 
-    //Metodo para verificar se exist tag, se não ouver tag 
-    //será criada
     private async preloadTagByName(name: string): Promise<Tag> {
         const tag = await this.tagRepository.findOne({ name });
 

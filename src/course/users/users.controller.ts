@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateCourseDto } from '../dto/create-course.dto/create-course.dto';
+import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUserDto } from './dto/update-users.dto';
 import { UserService } from './users.service';
 
@@ -9,32 +10,29 @@ export default class UsersController {
 
     @Get()
     findAll() {
-        return this.userService.findAll({ relations: ['courses'] });
+        return this.userService.findAll();
     }
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.userService.findOne(
-            Number(id),
-            { relations: ['courses'] }
-        );
+        return this.userService.findOne(id);
     }
 
     @Post()
-    create(@Body() createCourseDto: CreateCourseDto) {
-        return this.userService.create(createCourseDto);
+    create(@Body() createUserDto: CreateUsersDto) {
+        return this.userService.createUser(createUserDto);
     }
 
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateUser: UpdateUserDto) {
-        return this.userService.update(
-            Number(id),
+        return this.userService.updateUser(
+            id,
             updateUser
         );
     }
 
     @Delete(':id')
     delete(@Param('id') id: string) {
-        return this.userService.deleteProps(Number(id));
+        return this.userService.removeUser(id);
     }
 }

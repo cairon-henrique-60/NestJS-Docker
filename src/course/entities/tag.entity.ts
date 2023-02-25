@@ -19,7 +19,6 @@ export class Tag {
     //Relação N p N
     @ManyToMany(() => Course, (course) => course.tags)
     courses: Course[];
-
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 }

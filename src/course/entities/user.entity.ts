@@ -16,10 +16,7 @@ export class User {
     name: string;
     @Column()
     role: string;
-    @JoinTable({ name: 'users_courses'})
-    @ManyToMany(() => Course, (course) => course.name, {
-        cascade: true,
-    })
+    @ManyToMany(() => Course, (course) => course.users)
     courses?: Course[];
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
