@@ -17,7 +17,7 @@ export class User {
     @Column()
     role: string;
     @ManyToMany(() => Course, (course) => course.users)
-    courses?: Course[];
+    courses?: Course["name"];
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 }

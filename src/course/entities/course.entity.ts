@@ -26,7 +26,7 @@ export class Course {
   tags: Tag[];
   @JoinTable({ name: 'users_courses'})
   @ManyToMany(() => User, (user) => user.courses)
-  users: User[];
+  users: User["name"];
   @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 }

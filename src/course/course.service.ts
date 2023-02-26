@@ -1,6 +1,4 @@
 import {
-    HttpException,
-    HttpStatus,
     Injectable,
     NotFoundException
 } from '@nestjs/common';
@@ -36,7 +34,7 @@ export class CourseService {
 
         if (!course) {
             throw new NotFoundException(`Course ${id} not found`);
-        };
+        }
         return course;
     };
 
@@ -46,18 +44,20 @@ export class CourseService {
             createCourseDto.tags.map(name => this.preloadTagByName(name)),
         );
 
-        const users = await Promise.all(
-            createCourseDto.user.map(name => this.userRepository.findOne(name)),
+        const users = createCourseDto.users && (
+            await Promise.all(
+                createCourseDto.users.map(name => this.userRepository.findOne({ name })),
+            )
         );
 
         if (!users) {
             throw new NotFoundException(`User ${users} not found`)
-        };
+        }
 
         const course = this.courseRepository.create({
             ...createCourseDto,
-            tags,
-            users,
+            ...tags,
+            ...users,
         });
         return this.courseRepository.save(course);
     }
@@ -68,21 +68,23 @@ export class CourseService {
                 updateCourseDto.tags.map(name => this.preloadTagByName(name)),
             )
         );
-        
-        const users = await Promise.all(
-            updateCourseDto.user.map(name => this.userRepository.findOne(name)),
+
+        const users = updateCourseDto.users && (
+            await Promise.all(
+                updateCourseDto.users.map(name => this.userRepository.findOne({ name })),
+            )
         );
 
         if (!users) {
             throw new NotFoundException(`User ${users} not found`)
-        };
+        }
 
-        const course = await this.courseRepository.preload({
+        const course = {
             id: +id,
             ...updateCourseDto,
             tags,
-            users,
-        });
+            ...users,
+        };
 
         if (!course) {
             throw new NotFoundException(`Course ${id} not found`);

@@ -8,5 +8,5 @@ export class CreateCourseDto {
     @IsString({each: true})
     readonly tags: string[];
      @IsString({each: true})
-    readonly user?: string[];
+    readonly users?: string[];
 }

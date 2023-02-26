@@ -35,36 +35,47 @@ export class UserService {
   };
 
   async createUser(createUserDto: CreateUsersDto) {
-    const courses = await Promise.all(
-      createUserDto.courses.map(name => this.shearchCourse.findOne({ name }))
+    const courses = createUserDto.courses && (
+      await Promise.all(
+        createUserDto.courses.map(name => this.shearchCourse.findOne({ name }))
+      )
     );
 
-    if (createUserDto.courses !== null && !courses) {
+    if (!courses) {
       throw new NotFoundException(`Course ${createUserDto.courses} not found`)
     };
 
     const newUser = this.userRepository.create({
       ...createUserDto,
-      courses,
+      ...courses,
     });
 
     return this.userRepository.save(newUser);
   };
 
-  async updateUser(id: string, createUserDto: UpdateUserDto) {
-    const courses = await Promise.all(
-      createUserDto.courses.map(name => this.shearchCourse.findOne({ name })),
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    const courses = updateUserDto.courses && (
+      await Promise.all(
+        updateUserDto.courses.map(name => this.shearchCourse.findOne({ name })),
+      )
     );
 
-    if (createUserDto.courses !== null && !courses) {
-      throw new NotFoundException(`Course ${createUserDto.courses} not found`);
+    if (!courses) {
+      throw new NotFoundException(`Course ${updateUserDto.courses} not found`);
     };
 
-    const user = await this.userRepository.preload({
-      id: +id,
-      ...createUserDto,
-      courses,
+    const teste = courses.forEach(course => {
+      course.name
     });
+
+    const nameCourse = {
+      name: String(teste),
+    }
+    const user = {
+      id: +id,
+      ...updateUserDto,
+      ...courses,
+    };
 
     if (!user) {
       throw new NotFoundException(`User ${id} not found`);
